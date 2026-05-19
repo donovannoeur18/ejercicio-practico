@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="indexstyles.css">
+	<title>Document</title>
+</head>
+<body>
+	<header>
+		<div class="headerJuegos">
+			<div></div>
+			<div><h1>Juegos olimpicos</h1></div>
+			<div><h2>Atletas</h2></div>
+			<div><h2>Deportes</h2></div>
+			<div><h2>Noticias</h2></div>
+			<div><h2>Olympic Channel</h2></div>
+			<div><h2>Let's move</h2></div>
+		</div>
+	</header>
+
+	<nav class="opciones">
+		<label for="evento"></label>
+		<select id="evento" name="evento">
+			<option value="londres">londres 2012</option>
+			<option value="Vancouver">Vancouver 2010</option>
+			<option value="Pekin">Pekin 2008</option>	
+		</select>
+		<label for="Deportes"></label>
+		<select id="Deportes" name="Deportes">
+			<option value="Futbol">Futbol</option>
+			<option value="Atletismo">Atletismo</option>
+			<option value="Gimnasia">Gimnasia</option>
+			<option value="Boxeo">Boxeo</option>
+			<option value="Lucha Grecorromana">Lucha Grecorromana</option>
+			<option value="Ciclismo en ruta">Ciclismo en ruta</option>
+		</select>
+		<label for="prueba"></label>
+		<select id="prueba" name="prueba">
+			<option value="100m">100 metros lisos</option>
+			<option value="1500m">1500 metros</option>
+			<option value="maraton">Maratón</option>
+			<option value="salto-longitud">Salto de longitud</option>
+		</select>
+		<button class="go" type="button">Ir</button>
+	</nav>
+
+	<footer>
+		<small>Todos los derechos reservados</small>
+	</footer>
+
+	<?php
+	$archivo = 'londres2012.csv';
+
+	if (file_exists($archivo)) {
+			if (($gestor = fopen($archivo, 'r')) !== FALSE) {
+					fgetcsv($gestor, 1000, ",");
+
+					while (($datos = fgetcsv($gestor, 1000, ",")) !== FALSE) {
+							$clasificacion = $datos[0];
+							$equipo        = $datos[1];
+							$participante  = $datos[2];
+							$resultados    = $datos[3];
+							$notas         = $datos[4];
+
+							$htmlMedalla = $clasificacion; 
+							if ($clasificacion === 'O') {
+									$htmlMedalla = '<span class="medalla oro">O</span>';
+							} elseif ($clasificacion === 'P') {
+									$htmlMedalla = '<span class="medalla plata">P</span>';
+							} elseif ($clasificacion === 'B') {
+									$htmlMedalla = '<span class="medalla bronce">B</span>';
+							}
+
+							echo "<tr>";
+							echo "<td>{$htmlMedalla}</td>";
+							echo "<td>{$equipo}</td>";
+							echo "<td><div class='celda-participante'><div class='avatar'></div> {$participante}</div></td>";
+							echo "<td>{$resultados}</td>";
+							echo "<td>{$notas}</td>";
+							echo "</tr>";
+					}
+					fclose($gestor);
+			}
+	} else {
+			echo "<tr><td colspan='5'>Error: No se encontró el archivo de datos.</td></tr>";
+	}
+	?>
+</body>
+</html>
